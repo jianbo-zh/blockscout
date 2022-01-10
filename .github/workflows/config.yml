@@ -12,7 +12,7 @@ on:
 env:
   MIX_ENV: test
   OTP_VERSION: '24.2'
-  ELIXIR_VERSION: '1.12.3'
+  ELIXIR_VERSION: '1.13.1'
 
 jobs:
   build-and-cache:

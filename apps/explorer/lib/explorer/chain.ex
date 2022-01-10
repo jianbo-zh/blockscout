@@ -1092,7 +1092,7 @@ defmodule Explorer.Chain do
       {:actual, Decimal.new(4)}
 
   """
-  @spec fee(%Transaction{gas_used: nil}, :ether | :gwei | :wei) :: {:maximum, Decimal.t()}
+  @spec fee(Transaction.t(), :ether | :gwei | :wei) :: {:maximum, Decimal.t()}
   def fee(%Transaction{gas: gas, gas_price: gas_price, gas_used: nil}, unit) do
     fee =
       gas_price
@@ -1102,7 +1102,7 @@ defmodule Explorer.Chain do
     {:maximum, fee}
   end
 
-  @spec fee(%Transaction{gas_used: Decimal.t()}, :ether | :gwei | :wei) :: {:actual, Decimal.t()}
+  @spec fee(Transaction.t(), :ether | :gwei | :wei) :: {:actual, Decimal.t()}
   def fee(%Transaction{gas_price: gas_price, gas_used: gas_used}, unit) do
     fee =
       gas_price
@@ -1282,8 +1282,7 @@ defmodule Explorer.Chain do
       [_ | _] = words ->
         term_final =
           words
-          |> Enum.map(fn [word] -> word <> ":*" end)
-          |> Enum.join(" & ")
+          |> Enum.map_join(" & ", fn [word] -> word <> ":*" end)
 
         {:some, term_final}
 
@@ -5195,54 +5194,61 @@ defmodule Explorer.Chain do
       |> parse_contract_response({:uint, 256})
       |> Decimal.new()
 
-    with {:ok, "0x" <> token_encoded} <-
-           token_signature
-           |> Contract.eth_call_request(foreign_token_address_hash, 1, nil, nil)
-           |> json_rpc(eth_call_foreign_json_rpc_named_arguments) do
-      token_hash = parse_contract_response(token_encoded, :address)
+    case token_signature
+         |> Contract.eth_call_request(foreign_token_address_hash, 1, nil, nil)
+         |> json_rpc(eth_call_foreign_json_rpc_named_arguments) do
+      {:ok, "0x" <> token_encoded} ->
+        token_hash = parse_contract_response(token_encoded, :address)
 
-      if token_hash do
-        token_hash_str = "0x" <> Base.encode16(token_hash, case: :lower)
+        if token_hash do
+          token_hash_str = "0x" <> Base.encode16(token_hash, case: :lower)
 
-        with {:ok, "0x" <> token_decimals_encoded} <-
-               decimals_signature
-               |> Contract.eth_call_request(token_hash_str, 1, nil, nil)
-               |> json_rpc(eth_call_foreign_json_rpc_named_arguments),
-             {:ok, "0x" <> foreign_token_total_supply_encoded} <-
-               total_supply_signature
-               |> Contract.eth_call_request(foreign_token_address_hash, 1, nil, nil)
-               |> json_rpc(eth_call_foreign_json_rpc_named_arguments) do
-          token_decimals = parse_contract_response(token_decimals_encoded, {:uint, 256})
+          with {:ok, "0x" <> token_decimals_encoded} <-
+                 decimals_signature
+                 |> Contract.eth_call_request(token_hash_str, 1, nil, nil)
+                 |> json_rpc(eth_call_foreign_json_rpc_named_arguments),
+               {:ok, "0x" <> foreign_token_total_supply_encoded} <-
+                 total_supply_signature
+                 |> Contract.eth_call_request(foreign_token_address_hash, 1, nil, nil)
+                 |> json_rpc(eth_call_foreign_json_rpc_named_arguments) do
+            token_decimals = parse_contract_response(token_decimals_encoded, {:uint, 256})
 
-          foreign_token_total_supply =
-            foreign_token_total_supply_encoded
-            |> parse_contract_response({:uint, 256})
-            |> Decimal.new()
+            foreign_token_total_supply =
+              foreign_token_total_supply_encoded
+              |> parse_contract_response({:uint, 256})
+              |> Decimal.new()
 
-          token_decimals_divider =
-            10
-            |> :math.pow(token_decimals)
-            |> Decimal.from_float()
+            token_decimals_divider =
+              10
+              |> :math.pow(token_decimals)
+              |> Decimal.from_float()
 
-          token_cap =
-            reserve
-            |> Decimal.div(foreign_token_total_supply)
-            |> Decimal.mult(home_token_total_supply)
-            |> Decimal.div(token_decimals_divider)
+            token_cap =
+              reserve
+              |> Decimal.div(foreign_token_total_supply)
+              |> Decimal.mult(home_token_total_supply)
+              |> Decimal.div(token_decimals_divider)
 
-          token_price = TokenExchangeRate.fetch_token_exchange_rate_by_address(token_hash_str)
+            token_price = TokenExchangeRate.fetch_token_exchange_rate_by_address(token_hash_str)
 
-          token_cap_usd =
-            if token_price do
-              token_price
-              |> Decimal.mult(token_cap)
-            else
-              0
-            end
+            token_cap_usd =
+              if token_price do
+                token_price
+                |> Decimal.mult(token_cap)
+              else
+                0
+              end
 
-          {:ok, token_cap_usd}
+            {:ok, token_cap_usd}
+          else
+            _ -> :error
+          end
+        else
+          :error
         end
-      end
+
+      _ ->
+        :error
     end
   end
 
