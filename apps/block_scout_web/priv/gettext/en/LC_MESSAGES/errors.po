@@ -9,7 +9,7 @@
 ## effect: edit them in PO (`.po`) files instead.
 ## From Ecto.Changeset.cast/4
 msgid "can't be blank"
-msgstr ""
+msgstr "不能为空"
 
 ## From Ecto.Changeset.unique_constraint/3
 msgid "has already been taken"
@@ -17,11 +17,11 @@ msgstr ""
 
 ## From Ecto.Changeset.put_change/3
 msgid "is invalid"
-msgstr ""
+msgstr "是无效的"
 
 ## From Ecto.Changeset.validate_acceptance/3
 msgid "must be accepted"
-msgstr ""
+msgstr "必须接受"
 
 ## From Ecto.Changeset.validate_format/3
 msgid "has invalid format"
