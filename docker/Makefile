@@ -1,7 +1,7 @@
 SYSTEM = $(shell uname -s)
 HOST = host.docker.internal
-DOCKER_IMAGE = blockscout_prod
-BS_CONTAINER_NAME = blockscout
+DOCKER_IMAGE = starchain_prod
+BS_CONTAINER_NAME = starchain
 PG_CONTAINER_NAME = postgres
 PG_CONTAINER_IMAGE = postgres:12.5
 THIS_FILE = $(lastword $(MAKEFILE_LIST))
