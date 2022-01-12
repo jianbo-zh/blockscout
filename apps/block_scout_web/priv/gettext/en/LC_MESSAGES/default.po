@@ -350,7 +350,7 @@ msgstr "区块"
 #: lib/block_scout_web/templates/block/_link.html.eex:2
 #: lib/block_scout_web/templates/internal_transaction/_tile.html.eex:28 lib/block_scout_web/templates/tokens/transfer/_token_transfer.html.eex:43
 msgid "Block #%{number}"
-msgstr ""
+msgstr "区块 #%{number}"
 
 #, elixir-format
 #: lib/block_scout_web/templates/block/_metatags.html.eex:3
@@ -589,7 +589,7 @@ msgstr "编译器版本"
 #, elixir-format
 #: lib/block_scout_web/views/transaction_view.ex:342
 msgid "Confirmed"
-msgstr "确认的"
+msgstr "已确认"
 
 #, elixir-format
 #: lib/block_scout_web/templates/transaction/overview.html.eex:118
@@ -963,7 +963,7 @@ msgstr ""
 #: lib/block_scout_web/templates/address/overview.html.eex:30
 #: lib/block_scout_web/templates/api_docs/_action_tile.html.eex:166 lib/block_scout_web/templates/api_docs/_eth_rpc_item.html.eex:127
 msgid "Details"
-msgstr ""
+msgstr "详情"
 
 #, elixir-format
 #: lib/block_scout_web/templates/block/overview.html.eex:153
@@ -978,7 +978,7 @@ msgstr ""
 #, elixir-format
 #: lib/block_scout_web/templates/csv_export/index.html.eex:25
 msgid "Download"
-msgstr ""
+msgstr "下载"
 
 #, elixir-format
 #: lib/block_scout_web/templates/address_contract_verification_via_json/new.html.eex:26
@@ -1764,12 +1764,12 @@ msgstr ""
 #: lib/block_scout_web/templates/stakes/_stakes_modal_delegators_list.html.eex:184 lib/block_scout_web/views/transaction_view.ex:348
 #: lib/block_scout_web/views/transaction_view.ex:386
 msgid "Pending"
-msgstr ""
+msgstr "待处理"
 
 #, elixir-format
 #: lib/block_scout_web/templates/pending_transaction/index.html.eex:5
 msgid "Pending Transactions"
-msgstr ""
+msgstr "待处理交易"
 
 #, elixir-format
 #: lib/block_scout_web/templates/stakes/_stakes_modal_stake.html.eex:45
@@ -1997,7 +1997,7 @@ msgstr "搜索结果"
 #, elixir-format
 #: lib/block_scout_web/templates/layout/_search.html.eex:3
 msgid "Search by address, token symbol name, transaction hash, or block number"
-msgstr "请输入地址 / 交易哈希 / 区块编号 / 代币 / ENS"
+msgstr "请输入地址 / 交易哈希 / 区块编号 / 代币"
 
 #, elixir-format
 #: lib/block_scout_web/templates/layout/_network_selector.html.eex:18
